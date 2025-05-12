@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIP Lifecycle Management</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f8fbfd;
+      margin: 0;
+      padding: 0;
+      color: #234;
+    }
+    .container {
+      width: 100vw;
+      min-height: 100vh;
+      margin: 0;
+      background: #fff;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 32px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    h1 {
+      text-align: center;
+      color: #2a5d9f;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #4a7bb7;
+      margin-bottom: 32px;
+      font-size: 1.1em;
+    }
+    .flowchart-area {
+      width: 100vw;
+      overflow-x: auto;
+      overflow-y: visible;
+      display: block;
+      margin-bottom: 0px;
+      -webkit-overflow-scrolling: touch;
+      background: none;
+      position: relative;
+    }
+    .flowchart-svg {
+      display: block;
+      background: none;
+      /* width and height will be set dynamically */
+    }
+    .fip-box {
+      fill: #eaf3fc;
+      stroke: #b3d1f7;
+      stroke-width: 2;
+      rx: 10;
+      cursor: pointer;
+      filter: drop-shadow(0 1px 4px #0001);
+    }
+    .fip-label {
+      font-size: 1.05em;
+      font-weight: 600;
+      fill: #2a5d9f;
+      pointer-events: none;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .fip-role {
+      font-size: 0.95em;
+      fill: #3a7d3a;
+      font-style: italic;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 400;
+      pointer-events: none;
+    }
+    .fip-arrow {
+      stroke: #2a5d9f;
+      stroke-width: 2.5;
+      marker-end: url(#arrowhead);
+      fill: none;
+    }
+    .fip-box.selected {
+      fill: #d2e7fa;
+      stroke: #2a5d9f;
+    }
+    .fip-details {
+      display: none;
+      position: fixed;
+      background: #f3f8fd;
+      border-left: 3px solid #b3d1f7;
+      padding: 14px 18px;
+      border-radius: 6px;
+      color: #234;
+      font-size: 0.98em;
+      box-shadow: 0 1px 4px #0001;
+      max-width: 340px;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      pointer-events: auto;
+      min-width: 220px;
+    }
+    .fip-details.visible {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .feedback-section {
+      margin: 12px auto 24px auto;
+      padding: 24px 24px 18px 24px;
+      background: #f3f8fd;
+      border-radius: 10px;
+      box-shadow: 0 1px 8px #0001;
+      max-width: 700px;
+      text-align: center;
+      color: #234;
+      font-size: 1.05em;
+    }
+    .feedback-section b {
+      color: #2a5d9f;
+      font-size: 1.13em;
+      display: block;
+      margin-bottom: 6px;
+    }
+    @media (max-width: 1200px) {
+      .flowchart-svg {
+        /* height will be set dynamically */
+      }
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 10px 0 0 0;
+      }
+      .flowchart-area {
+        width: 100vw;
+      }
+      .flowchart-svg {
+        /* height will be set dynamically */
+      }
+      .fip-details {
+        max-width: 95vw;
+        padding: 10px 4px;
+      }
+      .feedback-section {
+        padding: 12px 4vw 10px 4vw;
+        font-size: 0.98em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FIP Lifecycle Management</h1>
+    <div class="subtitle">Interactive horizontal flowchart of the Filecoin Improvement Proposal (FIP) Lifecycle</div>
+    <div class="flowchart-area" id="flowchart-area">
+      <svg class="flowchart-svg" id="fip-svg"></svg>
+    </div>
+    <div class="feedback-section">
+      <b>Community Invitation for Feedback</b>
+      This framework is designed to empower robust governance, prioritizing clarity, transparency, and community agency. We warmly invite feedback, suggestions, or concerns regarding any aspect of this lifecycle. Community collaboration is essential in evolving this governance process, ensuring it remains responsive, fair, and effective for the Filecoin ecosystem.
+    </div>
+    <div id="fip-details-popup" class="fip-details"></div>
+  </div>
+  <script>
+    // --- FLOWCHART DATA ---
+    const nodes = [
+      { id: 'discussion', label: 'Discussion', x: 80, y: 180, width: 140, height: 48, details: `<b>Discussion Stage</b><br>This initial phase is meant to facilitate open dialogue, ensuring that any potential proposals are thoroughly debated within the community before formalizing a FIP.<br><i>Rationale:</i> Encourages early collaboration, reducing redundancy and increasing alignment with community priorities.`, roleLabel: 'Governance Facilitator' },
+      { id: 'no-fip', label: 'NO FIP', x: 80, y: 320, width: 120, height: 48, details: `<b>No FIP</b><br>The discussion does not result in a formal FIP proposal.` },
+      { id: 'fip-draft', label: 'FIP DRAFT', x: 320, y: 180, width: 140, height: 48, details: `<b>FIP Draft</b><br>Formalizes ideas from discussions into structured proposals clearly outlining intent, implementation details, and anticipated impacts.<br><i>Rationale:</i> Enhances proposal quality and readability, setting clear expectations and standards.` },
+      { id: 'fip-reviewers', label: 'FIP Reviewers', x: 500, y: 180, width: 140, height: 48, details: `<b>FIP Reviewers</b><br>Subject matter experts or dedicated reviewers analyze drafts to provide critical and constructive feedback.<br><i>Rationale:</i> Maintains high-quality proposals, reducing future complications or ambiguities.`, roleLabel: 'FIP Reviewers' },
+      { id: 'fip-assigned', label: 'FIP ASSIGNED', x: 700, y: 180, width: 140, height: 48, details: `<b>FIP Assigned</b><br>Formally assigns the FIP a unique identifier and places it in an official governance pipeline.<br><i>Rationale:</i> Provides traceability, clarity, and structure to the lifecycle management.` },
+      { id: 'timelock', label: 'TIMELOCK', x: 900, y: 180, width: 140, height: 48, details: `<b>Timelock</b><br>Introduces a deliberate delay before implementation, allowing community and stakeholders sufficient time for comprehensive review.<br><i>Rationale:</i> Prevents rash or inadequately vetted changes, improving decision-making quality.` },
+      // Timelock branches
+      { id: 'community-veto', label: 'Community Veto', x: 1150, y: 80, width: 140, height: 48, details: `<b>Community Veto</b><br>Enables community-driven rejection through an adaptive quorum model rather than traditional thresholds.<br><i>Rationale:</i> Reduces voter fatigue and apathy, ensuring that significant opposition (rather than inactivity) stops proposals.` },
+      { id: 'security-veto', label: 'Security Veto', x: 1150, y: 280, width: 140, height: 48, details: `<b>Security Veto</b><br>The Security Council holds veto power over proposals posing substantial network security risks, requiring supermajority consensus.<br><i>Rationale:</i> Prioritizes network security and stability, ensuring technical integrity takes precedence.` },
+      // Community Veto branches
+      { id: 'community-call', label: 'Community Call', x: 1400, y: 30, width: 140, height: 48, details: `<b>Community Call</b><br>Scheduled interactions for live, transparent discussions around the FIP, addressing concerns or misunderstandings.<br><i>Rationale:</i> Enhances real-time community engagement, deepening trust and clarity.` },
+      { id: 'community-voting', label: 'Community Voting', x: 1400, y: 130, width: 140, height: 48, details: `<b>Community Voting</b><br>Flexible voting mechanisms (e.g., reputation-based, token-based, escrow systems) will be explored to identify the most effective method for Filecoin.<br><i>Rationale:</i> Aims to find fair, representative, and robust voting systems that accurately reflect community sentiment and stakeholder priorities.` },
+      // Security Veto branches
+      { id: 'multisig-voting', label: 'Multisig Voting', x: 1400, y: 230, width: 140, height: 48, details: `<b>Multisig Voting</b><br>High-stakes proposals may involve multi-signature (multisig) voting to safeguard critical decisions and further decentralize governance authority.<br><i>Rationale:</i> Strengthens security around pivotal governance actions, distributing authority to prevent centralization.` },
+      { id: 'implementers-call', label: "Implementers' Call", x: 1400, y: 330, width: 160, height: 48, details: `<b>Implementers' Call</b><br>Ensures alignment and understanding among those tasked with implementing the accepted FIP.<br><i>Rationale:</i> Secures efficient, coherent execution of proposals, avoiding misinterpretation or misalignment.` },
+      // Converge
+      { id: 'veto-successful', label: 'Veto Successful', x: 1650, y: 130, width: 140, height: 48, details: `<b>Veto Successful</b><br>Proposal is transparently communicated as rejected, ending the process clearly.<br><i>Rationale:</i> Offers transparency and definitive resolution, reducing confusion or repeated proposal iterations.` },
+      { id: 'fip-rejected', label: 'FIP Rejected', x: 1850, y: 130, width: 140, height: 48, details: `<b>FIP Rejected</b><br>The proposal is rejected and the process ends here.` },
+      { id: 'fip-accepted', label: 'FIP Accepted', x: 1650, y: 280, width: 140, height: 48, details: `<b>FIP Accepted</b><br>The proposal is accepted and moves to the implementation stage.` },
+      { id: 'fip-final', label: 'FIP Final', x: 1850, y: 280, width: 140, height: 48, details: `<b>FIP Final</b><br>Finalized proposals are clearly documented and archived for community reference, ensuring historical clarity and accountability.<br><i>Rationale:</i> Preserves institutional knowledge, facilitating ongoing transparency and accountability.` }
+    ];
+
+    const arrows = [
+      { from: 'discussion', to: 'no-fip' },
+      { from: 'discussion', to: 'fip-draft' },
+      { from: 'fip-draft', to: 'fip-reviewers' },
+      { from: 'fip-reviewers', to: 'fip-assigned' },
+      { from: 'fip-assigned', to: 'timelock' },
+      { from: 'timelock', to: 'community-veto' },
+      { from: 'timelock', to: 'security-veto' },
+      { from: 'community-veto', to: 'community-call' },
+      { from: 'community-veto', to: 'community-voting' },
+      { from: 'security-veto', to: 'multisig-voting' },
+      { from: 'security-veto', to: 'implementers-call' },
+      { from: 'community-call', to: 'veto-successful' },
+      { from: 'community-voting', to: 'veto-successful' },
+      { from: 'multisig-voting', to: 'veto-successful' },
+      { from: 'implementers-call', to: 'veto-successful' },
+      { from: 'veto-successful', to: 'fip-rejected' },
+      { from: 'multisig-voting', to: 'fip-accepted' },
+      { from: 'implementers-call', to: 'fip-accepted' },
+      { from: 'fip-accepted', to: 'fip-final' }
+    ];
+
+    const svg = document.getElementById('fip-svg');
+    const detailsPopup = document.getElementById('fip-details-popup');
+    const flowchartArea = document.getElementById('flowchart-area');
+
+    // Dynamically set SVG width and height based on node positions
+    function getDiagramBounds(nodes) {
+      let maxX = 0, maxY = 0;
+      for (const n of nodes) {
+        if (!n.label) continue;
+        if (n.x + n.width > maxX) maxX = n.x + n.width;
+        if (n.y + n.height > maxY) maxY = n.y + n.height;
+      }
+      return { width: maxX + 60, height: maxY + 40 };
+    }
+
+    function renderFlowchart() {
+      const bounds = getDiagramBounds(nodes);
+      svg.setAttribute('width', bounds.width);
+      svg.setAttribute('height', bounds.height);
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#2a5d9f" />
+          </marker>
+        </defs>
+      `;
+      for (const arrow of arrows) {
+        const from = nodes.find(n => n.id === arrow.from);
+        const to = nodes.find(n => n.id === arrow.to);
+        if (!from || !to) continue;
+        let startX = from.x + from.width;
+        let startY = from.y + from.height / 2;
+        let endX = to.x;
+        let endY = to.y + to.height / 2;
+        if (from.x === to.x) {
+          startX = from.x + from.width / 2;
+          startY = from.y + from.height;
+          endX = to.x + to.width / 2;
+          endY = to.y;
+        }
+        svg.innerHTML += `<path d="M${startX},${startY} C${startX+30},${startY} ${endX-30},${endY} ${endX},${endY}" class="fip-arrow" />`;
+      }
+      for (const node of nodes) {
+        if (!node.label) continue;
+        svg.innerHTML += `
+          <g class="fip-node" data-id="${node.id}" style="cursor:pointer;">
+            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" class="fip-box" rx="10" />
+            <text x="${node.x + node.width/2}" y="${node.y + node.height/2 + 6}" text-anchor="middle" class="fip-label">${node.label}</text>
+          </g>
+        `;
+        if (node.roleLabel) {
+          svg.innerHTML += `<text x="${node.x + node.width/2}" y="${node.y + node.height + 18}" text-anchor="middle" class="fip-role">${node.roleLabel}</text>`;
+        }
+      }
+    }
+
+    renderFlowchart();
+
+    svg.addEventListener('click', function(e) {
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+      let found = false;
+      for (const node of nodes) {
+        if (!node.label) continue;
+        if (
+          svgP.x >= node.x && svgP.x <= node.x + node.width &&
+          svgP.y >= node.y && svgP.y <= node.y + node.height
+        ) {
+          found = true;
+          detailsPopup.innerHTML = node.details;
+          // Calculate popup position relative to the SVG and viewport
+          const svgRect = svg.getBoundingClientRect();
+          const areaRect = flowchartArea.getBoundingClientRect();
+          // Box center in SVG coordinates
+          const boxCenterX = svgRect.left + (node.x + node.width / 2);
+          const boxBottomY = svgRect.top + node.y + node.height;
+          // Default popup position: below the box, centered
+          let popupLeft = boxCenterX - detailsPopup.offsetWidth / 2;
+          let popupTop = boxBottomY + 12;
+          // Ensure popup stays within the flowchart area horizontally
+          const minLeft = areaRect.left + 8;
+          const maxLeft = areaRect.right - detailsPopup.offsetWidth - 8;
+          if (popupLeft < minLeft) popupLeft = minLeft;
+          if (popupLeft > maxLeft) popupLeft = maxLeft;
+          // If popup would go off the bottom, show above the box
+          const popupHeight = detailsPopup.offsetHeight || 120;
+          const maxBottom = window.innerHeight - 24;
+          if (popupTop + popupHeight > maxBottom) {
+            popupTop = boxBottomY - node.height - popupHeight - 12;
+          }
+          detailsPopup.style.left = popupLeft + 'px';
+          detailsPopup.style.top = popupTop + 'px';
+          detailsPopup.classList.add('visible');
+          document.querySelectorAll('.fip-box').forEach(b => b.classList.remove('selected'));
+          const allRects = svg.querySelectorAll('rect.fip-box');
+          for (const rect of allRects) {
+            const rx = parseFloat(rect.getAttribute('x'));
+            const ry = parseFloat(rect.getAttribute('y'));
+            if (rx === node.x && ry === node.y) {
+              rect.classList.add('selected');
+            }
+          }
+          break;
+        }
+      }
+      if (!found) {
+        detailsPopup.classList.remove('visible');
+        document.querySelectorAll('.fip-box').forEach(b => b.classList.remove('selected'));
+      }
+    });
+    document.body.addEventListener('click', function(e) {
+      if (!svg.contains(e.target)) {
+        detailsPopup.classList.remove('visible');
+        document.querySelectorAll('.fip-box').forEach(b => b.classList.remove('selected'));
+      }
+    });
+  </script>
+</body>
+</html> 
