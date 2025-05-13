@@ -171,45 +171,36 @@
       { id: 'discussion', label: 'Discussion', x: 80, y: 180, width: 140, height: 48, details: `<b>Discussion Stage</b><br>This initial phase is meant to facilitate open dialogue, ensuring that any potential proposals are thoroughly debated within the community before formalizing a FIP.<br><i>Rationale:</i> Encourages early collaboration, reducing redundancy and increasing alignment with community priorities.`, roleLabel: 'Governance Facilitator' },
       { id: 'no-fip', label: 'NO FIP', x: 80, y: 320, width: 120, height: 48, details: `<b>No FIP</b><br>The discussion does not result in a formal FIP proposal.` },
       { id: 'fip-draft', label: 'FIP DRAFT', x: 320, y: 180, width: 140, height: 48, details: `<b>FIP Draft</b><br>Formalizes ideas from discussions into structured proposals clearly outlining intent, implementation details, and anticipated impacts.<br><i>Rationale:</i> Enhances proposal quality and readability, setting clear expectations and standards.` },
-      { id: 'fip-reviewers', label: 'FIP Reviewers', x: 500, y: 180, width: 140, height: 48, details: `<b>FIP Reviewers</b><br>Subject matter experts or dedicated reviewers analyze drafts to provide critical and constructive feedback.<br><i>Rationale:</i> Maintains high-quality proposals, reducing future complications or ambiguities.`, roleLabel: 'FIP Reviewers' },
+      { id: 'fip-editors', label: 'FIP Editors', x: 500, y: 180, width: 140, height: 48, details: `<b>FIP Editors</b><br>Subject matter experts or dedicated editors analyze drafts to provide critical and constructive feedback.<br><i>Rationale:</i> Maintains high-quality proposals, reducing future complications or ambiguities.`, roleLabel: 'FIP Editors' },
       { id: 'fip-assigned', label: 'FIP ASSIGNED', x: 700, y: 180, width: 140, height: 48, details: `<b>FIP Assigned</b><br>Formally assigns the FIP a unique identifier and places it in an official governance pipeline.<br><i>Rationale:</i> Provides traceability, clarity, and structure to the lifecycle management.` },
       { id: 'timelock', label: 'TIMELOCK', x: 900, y: 180, width: 140, height: 48, details: `<b>Timelock</b><br>Introduces a deliberate delay before implementation, allowing community and stakeholders sufficient time for comprehensive review.<br><i>Rationale:</i> Prevents rash or inadequately vetted changes, improving decision-making quality.` },
-      // Timelock branches
-      { id: 'community-veto', label: 'Community Veto', x: 1150, y: 80, width: 140, height: 48, details: `<b>Community Veto</b><br>Enables community-driven rejection through an adaptive quorum model rather than traditional thresholds.<br><i>Rationale:</i> Reduces voter fatigue and apathy, ensuring that significant opposition (rather than inactivity) stops proposals.` },
-      { id: 'security-veto', label: 'Security Veto', x: 1150, y: 280, width: 140, height: 48, details: `<b>Security Veto</b><br>The Security Council holds veto power over proposals posing substantial network security risks, requiring supermajority consensus.<br><i>Rationale:</i> Prioritizes network security and stability, ensuring technical integrity takes precedence.` },
-      // Community Veto branches
-      { id: 'community-call', label: 'Community Call', x: 1400, y: 30, width: 140, height: 48, details: `<b>Community Call</b><br>Scheduled interactions for live, transparent discussions around the FIP, addressing concerns or misunderstandings.<br><i>Rationale:</i> Enhances real-time community engagement, deepening trust and clarity.` },
-      { id: 'community-voting', label: 'Community Voting', x: 1400, y: 130, width: 140, height: 48, details: `<b>Community Voting</b><br>Flexible voting mechanisms (e.g., reputation-based, token-based, escrow systems) will be explored to identify the most effective method for Filecoin.<br><i>Rationale:</i> Aims to find fair, representative, and robust voting systems that accurately reflect community sentiment and stakeholder priorities.` },
-      // Security Veto branches
-      { id: 'multisig-voting', label: 'Multisig Voting', x: 1400, y: 230, width: 140, height: 48, details: `<b>Multisig Voting</b><br>High-stakes proposals may involve multi-signature (multisig) voting to safeguard critical decisions and further decentralize governance authority.<br><i>Rationale:</i> Strengthens security around pivotal governance actions, distributing authority to prevent centralization.` },
-      { id: 'implementers-call', label: "Implementers' Call", x: 1400, y: 330, width: 160, height: 48, details: `<b>Implementers' Call</b><br>Ensures alignment and understanding among those tasked with implementing the accepted FIP.<br><i>Rationale:</i> Secures efficient, coherent execution of proposals, avoiding misinterpretation or misalignment.` },
-      // Converge
-      { id: 'veto-successful', label: 'Veto Successful', x: 1650, y: 130, width: 140, height: 48, details: `<b>Veto Successful</b><br>Proposal is transparently communicated as rejected, ending the process clearly.<br><i>Rationale:</i> Offers transparency and definitive resolution, reducing confusion or repeated proposal iterations.` },
-      { id: 'fip-rejected', label: 'FIP Rejected', x: 1850, y: 130, width: 140, height: 48, details: `<b>FIP Rejected</b><br>The proposal is rejected and the process ends here.` },
-      { id: 'fip-accepted', label: 'FIP Accepted', x: 1650, y: 280, width: 140, height: 48, details: `<b>FIP Accepted</b><br>The proposal is accepted and moves to the implementation stage.` },
-      { id: 'fip-final', label: 'FIP Final', x: 1850, y: 280, width: 140, height: 48, details: `<b>FIP Final</b><br>Finalized proposals are clearly documented and archived for community reference, ensuring historical clarity and accountability.<br><i>Rationale:</i> Preserves institutional knowledge, facilitating ongoing transparency and accountability.` }
+      { id: 'community-veto', label: 'Community Veto', x: 1150, y: 100, width: 140, height: 48, details: `<b>Community Veto</b><br>Enables community-driven rejection through an adaptive quorum model rather than traditional thresholds.<br><i>Rationale:</i> Reduces voter fatigue and apathy, ensuring that significant opposition (rather than inactivity) stops proposals.` },
+      { id: 'security-veto', label: 'Security Veto', x: 1150, y: 260, width: 140, height: 48, details: `<b>Security Veto</b><br>The Security Council holds veto power over proposals posing substantial network security risks, requiring supermajority consensus.<br><i>Rationale:</i> Prioritizes network security and stability, ensuring technical integrity takes precedence.` },
+      { id: 'veto-outcome', label: 'Veto Outcome', x: 1400, y: 180, width: 160, height: 48, details: `Veto is a governance block that halts a proposal. After the timelock, votes are tallied, quorum checked, then veto counts are compared against community or security council thresholds. It represents a formal blockade—either by the broader community or by a specialized Security Council—signaling that critical concerns remain unresolved.` },
+      { id: 'veto-successful', label: 'Veto Successful', x: 1650, y: 100, width: 140, height: 48, details: `<b>Veto Successful</b><br>Proposal is transparently communicated as rejected, ending the process clearly.<br><i>Rationale:</i> Offers transparency and definitive resolution, reducing confusion or repeated proposal iterations.` },
+      { id: 'no-veto', label: 'No Veto', x: 1650, y: 260, width: 140, height: 48, details: `<b>No Veto</b><br>If no significant concerns are raised during the veto period, the proposal proceeds to acceptance.<br><i>Rationale:</i> Streamlines the process for uncontroversial proposals while maintaining the safety net of the veto period.` },
+      { id: 'fip-rejected', label: 'FIP Rejected', x: 1850, y: 100, width: 140, height: 48, details: `<b>FIP Rejected</b><br>The proposal is rejected and the process ends here.` },
+      { id: 'fip-accepted', label: 'FIP Accepted', x: 1850, y: 260, width: 140, height: 48, details: `<b>FIP Accepted</b><br>The proposal is accepted and moves to the implementation stage.` },
+      { id: 'implementers-call', label: "Implementers' Call", x: 2050, y: 260, width: 160, height: 48, details: `<b>Implementers' Call</b><br>Ensures alignment and understanding among those tasked with implementing the accepted FIP.<br><i>Rationale:</i> Secures efficient, coherent execution of proposals, avoiding misinterpretation or misalignment.` },
+      { id: 'fip-final', label: 'FIP Final', x: 2250, y: 260, width: 140, height: 48, details: `<b>FIP Final</b><br>Finalized proposals are clearly documented and archived for community reference, ensuring historical clarity and accountability.<br><i>Rationale:</i> Preserves institutional knowledge, facilitating ongoing transparency and accountability.` }
     ];
 
     const arrows = [
-      { from: 'discussion', to: 'no-fip' },
+      { from: 'discussion', to: 'no-fip', custom: true },
       { from: 'discussion', to: 'fip-draft' },
-      { from: 'fip-draft', to: 'fip-reviewers' },
-      { from: 'fip-reviewers', to: 'fip-assigned' },
+      { from: 'fip-draft', to: 'fip-editors' },
+      { from: 'fip-editors', to: 'fip-assigned' },
       { from: 'fip-assigned', to: 'timelock' },
       { from: 'timelock', to: 'community-veto' },
       { from: 'timelock', to: 'security-veto' },
-      { from: 'community-veto', to: 'community-call' },
-      { from: 'community-veto', to: 'community-voting' },
-      { from: 'security-veto', to: 'multisig-voting' },
-      { from: 'security-veto', to: 'implementers-call' },
-      { from: 'community-call', to: 'veto-successful' },
-      { from: 'community-voting', to: 'veto-successful' },
-      { from: 'multisig-voting', to: 'veto-successful' },
-      { from: 'implementers-call', to: 'veto-successful' },
+      { from: 'community-veto', to: 'veto-outcome' },
+      { from: 'security-veto', to: 'veto-outcome' },
+      { from: 'veto-outcome', to: 'veto-successful' },
+      { from: 'veto-outcome', to: 'no-veto' },
       { from: 'veto-successful', to: 'fip-rejected' },
-      { from: 'multisig-voting', to: 'fip-accepted' },
-      { from: 'implementers-call', to: 'fip-accepted' },
-      { from: 'fip-accepted', to: 'fip-final' }
+      { from: 'no-veto', to: 'fip-accepted' },
+      { from: 'fip-accepted', to: 'implementers-call' },
+      { from: 'implementers-call', to: 'fip-final' }
     ];
 
     const svg = document.getElementById('fip-svg');
@@ -246,6 +237,11 @@
         let startY = from.y + from.height / 2;
         let endX = to.x;
         let endY = to.y + to.height / 2;
+        // Custom arrow for 'no-fip' to avoid overlap
+        if (arrow.custom && arrow.from === 'discussion' && arrow.to === 'no-fip') {
+          svg.innerHTML += `<path d="M${startX},${startY} C${startX+30},${startY+60} ${endX-30},${endY-20} ${endX},${endY}" class="fip-arrow" />`;
+          continue;
+        }
         if (from.x === to.x) {
           startX = from.x + from.width / 2;
           startY = from.y + from.height;
