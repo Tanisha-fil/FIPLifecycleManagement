@@ -181,6 +181,52 @@
       color: #1e40af;
     }
     
+    .veto-components {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .veto-component {
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #ef4444;
+    }
+    
+    .veto-component h4 {
+      color: #dc2626;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+    
+    .veto-component p {
+      color: #475569;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    
+    .quorum-mechanism {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    
+    .quorum-mechanism h5 {
+      color: #d97706;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    
+    .quorum-mechanism p {
+      color: #92400e;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+    
     .feedback-section {
       background: linear-gradient(135deg, #1e40af, #3b82f6);
       color: white;
@@ -291,6 +337,10 @@
       .step {
         min-width: auto;
       }
+      
+      .veto-components {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -340,7 +390,7 @@
           <div class="step" data-step="veto">
             <div class="step-circle">6</div>
             <div class="step-title">Veto Period</div>
-            <div class="step-desc">Community and security oversight</div>
+            <div class="step-desc">Technical & community oversight</div>
           </div>
           
           <div class="step" data-step="implementation">
@@ -392,10 +442,32 @@
       </div>
       
       <div class="step-details" id="veto-details">
-        <h3>Veto Period</h3>
-        <p>Enables community-driven rejection through an adaptive quorum model and security council oversight. This ensures significant opposition can stop proposals while prioritizing network security.</p>
+        <h3>Veto Period: Technical Committee & Community Oversight</h3>
+        <p>During the timelock period, two parallel veto mechanisms operate to ensure comprehensive oversight of proposals:</p>
+        
+        <div class="veto-components">
+          <div class="veto-component">
+            <h4>Technical Committee (Security Veto)</h4>
+            <p>The Technical Committee holds veto power over proposals posing substantial network security risks, requiring supermajority consensus among committee members.</p>
+            <p><strong>Scope:</strong> Network security, technical integrity, and stability concerns</p>
+            <p><strong>Threshold:</strong> Supermajority consensus required</p>
+          </div>
+          
+          <div class="veto-component">
+            <h4>Community Veto</h4>
+            <p>Enables community-driven rejection through an adaptive quorum model that prevents small, unrepresentative groups from blocking proposals.</p>
+            <p><strong>Scope:</strong> Community concerns, governance issues, and ecosystem impact</p>
+            <p><strong>Mechanism:</strong> Adaptive quorum with negative turnout bias</p>
+          </div>
+        </div>
+        
+        <div class="quorum-mechanism">
+          <h5>Adaptive Quorum with Negative Turnout Bias</h5>
+          <p>This mechanism prevents small, unrepresentative groups from vetoing proposals by adjusting the required quorum based on turnout. Lower turnout requires higher consensus percentages, ensuring that significant opposition (rather than simple inactivity) is needed to stop proposals. This reduces voter fatigue and apathy while maintaining robust community oversight.</p>
+        </div>
+        
         <div class="rationale">
-          <strong>Rationale:</strong> Reduces voter fatigue and apathy, ensuring that significant opposition stops proposals.
+          <strong>Rationale:</strong> Reduces voter fatigue and apathy, ensuring that significant opposition stops proposals while preventing small groups from blocking progress.
         </div>
       </div>
       
